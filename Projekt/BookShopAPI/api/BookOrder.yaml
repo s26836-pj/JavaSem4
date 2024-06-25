@@ -1,0 +1,326 @@
+openapi: 3.0.1
+info:
+  title: BookShop API
+  description: API for managing books and book orders
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /book:
+    get:
+      summary: List all books
+      operationId: listBooks
+      responses:
+        '200':
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookResponse'
+    post:
+      summary: Create a new book
+      operationId: createBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+      responses:
+        '200':
+          description: Book created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookResponse'
+  /book/title/{title}:
+    get:
+      summary: Get books by title
+      operationId: getBooksByTitle
+      parameters:
+        - name: title
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Books found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookResponse'
+        '404':
+          description: Books not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Books not found"
+  /book/genre/{genre}:
+    get:
+      summary: Get books by genre
+      operationId: getBooksByGenre
+      parameters:
+        - name: genre
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Books found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookResponse'
+        '404':
+          description: Books not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Books not found"
+  /book/author/{author}:
+    get:
+      summary: Get books by author
+      operationId: getBooksByAuthor
+      parameters:
+        - name: author
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Books found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookResponse'
+        '404':
+          description: Books not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Books not found"
+  /book/price/{uuid}:
+    get:
+      summary: Get book price by UUID
+      operationId: getBookPrice
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Book price found
+          content:
+            application/json:
+              schema:
+                type: number
+                format: double
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Book not found"
+  /book/{uuid}:
+    put:
+      summary: Update a book by UUID
+      operationId: updateBook
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+      responses:
+        '200':
+          description: Book updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookResponse'
+    delete:
+      summary: Delete a book by UUID
+      operationId: deleteBook
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Book deleted
+  /book-order:
+    get:
+      summary: List all book orders
+      operationId: listBookOrders
+      responses:
+        '200':
+          description: A list of book orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookOrderResponse'
+    post:
+      summary: Create a new book order
+      operationId: createBookOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookOrderRequest'
+      responses:
+        '200':
+          description: Book order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookOrderResponse'
+  /book-order/{id}:
+    get:
+      summary: Get a book order by ID
+      operationId: getBookOrderById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Book order found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookOrderResponse'
+        '404':
+          description: Book order not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Book order not found"
+    put:
+      summary: Update a book order by ID
+      operationId: updateBookOrder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookOrderRequest'
+      responses:
+        '200':
+          description: Book order updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookOrderResponse'
+    delete:
+      summary: Delete a book order by ID
+      operationId: deleteBookOrder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Book order deleted
+components:
+  schemas:
+    BookRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        price:
+          type: number
+          format: double
+        genre:
+          type: string
+        pages:
+          type: integer
+        visitCount:
+          type: integer
+        available:
+          type: boolean
+        quantity:
+          type: integer
+    BookResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        author:
+          type: string
+        price:
+          type: number
+          format: double
+        genre:
+          type: string
+        quantity:
+          type: integer
+    BookOrderRequest:
+      type: object
+      properties:
+        bookId:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+    BookOrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        bookId:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
